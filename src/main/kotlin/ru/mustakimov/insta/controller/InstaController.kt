@@ -2,6 +2,7 @@ package ru.mustakimov.insta.controller
 
 import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
@@ -34,15 +35,18 @@ class InstaDownloadController(
 ) {
 
     @GetMapping("/download/tag/{tag}")
-    fun getInfoForTag(@PathVariable("tag") tag: String): List<InstagramFeedItem> {
-        return instagramRepository.getPostsWithLocationByTagName(tag)
+    fun getInfoForTag(@PathVariable("tag") tag: String, model: Model): String {
+        model.addAttribute("data", instagramRepository.getPostsWithLocationByTagName(tag))
+        return ""
     }
 
     @GetMapping("/download/location", params = ["lat", "lng"])
     fun getPostsByLocation(
         @RequestParam("lat") lat: Float,
-        @RequestParam("lng") lng: Float
-    ): List<Media> {
-        return instagramRepository.getPostsFromLocation(lat, lng)
+        @RequestParam("lng") lng: Float,
+        model: Model
+    ): String {
+        model.addAttribute("data", instagramRepository.getPostsFromLocation(lat, lng))
+        return ""
     }
 }

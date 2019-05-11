@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse
 
 class CsvView : AbstractCsvView() {
 
-
     @Throws(Exception::class)
     override fun buildCsvDocument(
         model: Map<String, Any>,
@@ -24,6 +23,8 @@ class CsvView : AbstractCsvView() {
         val data = model["data"] as? List<*> ?: return
 
         if (data[0] is InstagramFeedItem) {
+            val headers = arrayOf("instagram_id", "lat", "lng", "timestamp")
+            writer.writeHeader(*headers)
             data.map {
                 val v = it as InstagramFeedItem
                 mapOf(
@@ -33,19 +34,22 @@ class CsvView : AbstractCsvView() {
                     "timestamp" to v.taken_at
                 )
             }.forEach {
-                writer.write(it)
+                writer.write(it, *headers)
             }
         } else if (data[0] is Media) {
+            val headers = arrayOf("instagram_id", "lat", "lng", "timestamp", "text")
+            writer.writeHeader(*headers)
             data.map {
                 val v = it as Media
                 mapOf(
                     "instagram_id" to v.code,
                     "lat" to v.lat,
                     "lng" to v.lng,
-                    "timestamp" to v.takenAt
+                    "timestamp" to v.takenAt,
+                    "text" to v.caption?.text
                 )
             }.forEach {
-                writer.write(it)
+                writer.write(it, *headers)
             }
         }
         writer.close()

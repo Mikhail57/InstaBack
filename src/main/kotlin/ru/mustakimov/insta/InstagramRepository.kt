@@ -36,6 +36,7 @@ class InstagramNetworkRepository : InstagramRepository {
         }
     }
 
+    @Cacheable("instagram_by_location_posts")
     override fun getPostsFromLocation(lat: Float, lng: Float): List<Media> {
         val locationsRequest = InstagramSearchLocationsRequest(lat.toString(), lng.toString(), "")
         val venues = instagram.sendRequest(locationsRequest).venues.sortedBy {
