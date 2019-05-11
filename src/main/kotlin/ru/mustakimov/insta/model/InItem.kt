@@ -1,4 +1,4 @@
-package ru.mustakimov.insta.models
+package ru.mustakimov.insta.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.annotation.Generated

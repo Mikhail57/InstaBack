@@ -1,12 +1,10 @@
-package ru.mustakimov.insta.models
+package ru.mustakimov.insta.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.annotation.Generated
 
 @Generated("com.robohorse.robopojogenerator")
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class PreviewCommentsItem(
+data class Caption(
 
 	@field:JsonProperty("share_enabled")
 	val shareEnabled: Boolean? = null,

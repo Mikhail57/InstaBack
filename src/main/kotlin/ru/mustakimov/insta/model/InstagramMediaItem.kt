@@ -1,11 +1,11 @@
-package ru.mustakimov.insta.models
+package ru.mustakimov.insta.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.annotation.Generated
 
 @Generated("com.robohorse.robopojogenerator")
-data class Usertags(
+data class InstagramMediaItem(
 
-	@field:JsonProperty("in")
-	val `in`: List<Any?>? = null
+	@field:JsonProperty("media")
+	val media: Media
 )

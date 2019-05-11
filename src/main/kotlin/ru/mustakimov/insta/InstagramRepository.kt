@@ -1,15 +1,14 @@
 package ru.mustakimov.insta
 
 import org.brunocvcunha.instagram4j.Instagram4j
-import org.brunocvcunha.instagram4j.requests.InstagramLocationFeedRequest
 import org.brunocvcunha.instagram4j.requests.InstagramSearchLocationsRequest
 import org.brunocvcunha.instagram4j.requests.InstagramTagFeedRequest
 import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
-import ru.mustakimov.insta.models.InstagramLocationFeedSectionsResult
-import ru.mustakimov.insta.models.Media
+import ru.mustakimov.insta.model.InstagramLocationFeedSectionsResult
+import ru.mustakimov.insta.model.Media
 import java.net.URLEncoder
 
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.brunocvcunha.instagram4j.requests.InstagramPostRequest
-import ru.mustakimov.insta.models.InstagramLocationFeedSectionsResult
+import ru.mustakimov.insta.model.InstagramLocationFeedSectionsResult
 import java.util.LinkedHashMap
 
 class InstagramFacebookLocationFeedRequest(
