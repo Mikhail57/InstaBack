@@ -15,7 +15,7 @@ import java.net.URLEncoder
 interface InstagramRepository {
     fun getPostsByTagName(tag: String): List<InstagramFeedItem>
     fun getPostsWithLocationByTagName(tag: String): List<InstagramFeedItem>
-    fun getPostsFromLocation(lat: Float, lng: Float): List<Media>
+    fun getPostsFromLocation(lat: Float, lng: Float, radius: Float? = null): List<Media>
 }
 
 @Service
@@ -37,21 +37,33 @@ class InstagramNetworkRepository : InstagramRepository {
     }
 
     @Cacheable("instagram_by_location_posts")
-    override fun getPostsFromLocation(lat: Float, lng: Float): List<Media> {
+    override fun getPostsFromLocation(lat: Float, lng: Float, radius: Float?): List<Media> {
         val locationsRequest = InstagramSearchLocationsRequest(lat.toString(), lng.toString(), "")
-        val venues = instagram.sendRequest(locationsRequest).venues.sortedBy {
-            Math.pow(
-                it.lat - lat,
-                2.0
-            ) + Math.pow(it.lng - lng, 2.0)
+        val unorderedVenues = instagram.sendRequest(locationsRequest).venues
+        val venues = if (radius == null)
+            unorderedVenues.sortedBy {
+                haversine(Location(lat, lng), Location(it.lat.toFloat(), it.lng.toFloat()))
+            }
+        else
+            unorderedVenues.filter {
+                haversine(
+                    Location(lat, lng),
+                    Location(it.lat.toFloat(), it.lng.toFloat())
+                ) <= radius
+            }
+        if (venues.isEmpty())
+            return emptyList()
+
+        if (radius == null) {
+            val location = venues[0]
+            val request = InstagramFacebookLocationFeedRequest(location.external_id)
+            return instagram.sendRequest(request).toInstagramFeedItems()
         }
-        val location = venues.firstOrNull() ?: return emptyList()
-        println("-----------------------------------")
-        println(venues)
-        println(location)
-        println("-----------------------------------")
-        val request = InstagramFacebookLocationFeedRequest(location.external_id)
-        return instagram.sendRequest(request).toInstagramFeedItems()
+
+        return venues.flatMap { location ->
+            val request = InstagramFacebookLocationFeedRequest(location.external_id)
+            instagram.sendRequest(request).toInstagramFeedItems()
+        }
     }
 
 }

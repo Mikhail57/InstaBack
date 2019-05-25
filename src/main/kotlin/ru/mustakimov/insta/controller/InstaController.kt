@@ -23,9 +23,10 @@ class InstaController(
     @GetMapping("/location", params = ["lat", "lng"])
     fun getPostsByLocation(
         @RequestParam("lat") lat: Float,
-        @RequestParam("lng") lng: Float
+        @RequestParam("lng") lng: Float,
+        @RequestParam("r") radius: Float?
     ): List<Media> {
-        return instagramRepository.getPostsFromLocation(lat, lng)
+        return instagramRepository.getPostsFromLocation(lat, lng, radius)
     }
 }
 
