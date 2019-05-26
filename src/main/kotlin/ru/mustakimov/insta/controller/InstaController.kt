@@ -22,32 +22,10 @@ class InstaController(
 
     @GetMapping("/location", params = ["lat", "lng"])
     fun getPostsByLocation(
-        @RequestParam("lat") lat: Float,
-        @RequestParam("lng") lng: Float,
+        @RequestParam("lat") lat: Double,
+        @RequestParam("lng") lng: Double,
         @RequestParam("r") radius: Float?
     ): List<Media> {
         return instagramRepository.getPostsFromLocation(lat, lng, radius)
-    }
-}
-
-@Controller
-class InstaDownloadController(
-    private val instagramRepository: InstagramRepository
-) {
-
-    @GetMapping("/download/tag/{tag}")
-    fun getInfoForTag(@PathVariable("tag") tag: String, model: Model): String {
-        model.addAttribute("data", instagramRepository.getPostsWithLocationByTagName(tag))
-        return ""
-    }
-
-    @GetMapping("/download/location", params = ["lat", "lng"])
-    fun getPostsByLocation(
-        @RequestParam("lat") lat: Float,
-        @RequestParam("lng") lng: Float,
-        model: Model
-    ): String {
-        model.addAttribute("data", instagramRepository.getPostsFromLocation(lat, lng))
-        return ""
     }
 }

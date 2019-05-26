@@ -15,7 +15,7 @@ import java.net.URLEncoder
 interface InstagramRepository {
     fun getPostsByTagName(tag: String): List<InstagramFeedItem>
     fun getPostsWithLocationByTagName(tag: String): List<InstagramFeedItem>
-    fun getPostsFromLocation(lat: Float, lng: Float, radius: Float? = null): List<Media>
+    fun getPostsFromLocation(lat: Double, lng: Double, radius: Float? = null): List<Media>
 }
 
 @Service
@@ -37,18 +37,18 @@ class InstagramNetworkRepository : InstagramRepository {
     }
 
     @Cacheable("instagram_by_location_posts")
-    override fun getPostsFromLocation(lat: Float, lng: Float, radius: Float?): List<Media> {
+    override fun getPostsFromLocation(lat: Double, lng: Double, radius: Float?): List<Media> {
         val locationsRequest = InstagramSearchLocationsRequest(lat.toString(), lng.toString(), "")
         val unorderedVenues = instagram.sendRequest(locationsRequest).venues
         val venues = if (radius == null)
             unorderedVenues.sortedBy {
-                haversine(Location(lat, lng), Location(it.lat.toFloat(), it.lng.toFloat()))
+                distance(Location(lat, lng), Location(it.lat, it.lng))
             }
         else
             unorderedVenues.filter {
-                haversine(
+                distance(
                     Location(lat, lng),
-                    Location(it.lat.toFloat(), it.lng.toFloat())
+                    Location(it.lat, it.lng)
                 ) <= radius
             }
         if (venues.isEmpty())

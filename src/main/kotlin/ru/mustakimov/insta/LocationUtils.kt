@@ -1,26 +1,35 @@
 package ru.mustakimov.insta
 
-import kotlin.math.*
+import java.lang.Math.toRadians
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sqrt
 
-fun haversine(l1: Location, l2: Location): Float {
-    val (lat1, lon1) = l1.toRadian()
-    val (lat2, lon2) = l2.toRadian()
 
-    val dlon = lon2 - lon1
-    val dlat = lat2 - lat1
+private const val EARTH_RADIUS = 6371 // Approx Earth radius in KM
 
-    val a = sin(dlat / 2).pow(2) + (cos(lat1) * cos(lat2) * sin(dlon / 2)).pow(2)
-    val c = 2 * asin(sqrt(a))
-    val r = 6371
-
-    return c * r
-}
 
 data class Location(
-    val latitude: Float,
-    val longitude: Float
+    val latitude: Double,
+    val longitude: Double
 )
 
-fun Float.toRadian(): Float = (this * PI / 180).toFloat()
+fun distance(start: Location, end: Location): Double {
+    var startLat = start.latitude
+    var endLat = end.latitude
 
-fun Location.toRadian(): Location = Location(latitude.toRadian(), longitude.toRadian())
+    val dLat = toRadians(endLat - startLat)
+    val dLong = toRadians(end.longitude - start.longitude)
+
+    startLat = toRadians(startLat)
+    endLat = toRadians(endLat)
+
+    val a = haversin(dLat) + cos(startLat) * cos(endLat) * haversin(dLong)
+    val c = 2 * atan2(Math.sqrt(a), sqrt(1 - a))
+
+    return EARTH_RADIUS * c
+}
+
+private fun haversin(angle: Double): Double {
+    return Math.pow(Math.sin(angle / 2), 2.0)
+}
