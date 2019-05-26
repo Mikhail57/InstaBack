@@ -1,9 +1,9 @@
 package ru.mustakimov.insta.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class User(
 
 	@field:JsonProperty("is_private")
@@ -32,9 +32,6 @@ data class User(
 
 	@field:JsonProperty("username")
 	val username: String? = null,
-
-	@field:JsonProperty("friendship_status")
-	val friendshipStatus: FriendshipStatus? = null,
 
 	@field:JsonProperty("is_verified")
 	val isVerified: Boolean? = null
